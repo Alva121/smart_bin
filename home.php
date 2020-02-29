@@ -1,40 +1,60 @@
 <?php
-include 'helper.php';
 session_start();
+include 'helper.php';
+
+//echo  $_SESSION['login'];
 if(!isset($_SESSION["login"]))
 {
   header("location:index.php");
 }
+if(isset($_GET['deletedriver']))
+{
+    $id=$_GET['deletedriver'];
+    deletedriver($id);
+}
+if(isset($_GET['deletebin']))
+{
+    $id=$_GET['deletebin'];
+    deletebin($id);
+}
 if(isset($_POST['logout']))
 {
 session_destroy();
-
 header("location:index.php");
-
 }
 if(isset($_POST['addbin']))
 {
-
 $lat=$_POST['lat'];
 $lng=$_POST['lng'];
-
 $name=$_POST['name'];
-
 addbin($lat,$lng,$name);
-
 }
 if(isset($_POST['addriver']))
 {
-
 $first=$_POST['first'];
-
 $last=$_POST['last'];
-
 $phone=$_POST['phone'];
-
-addriver($first,$last,$phone);
-
+$email=$_POST['email'];
+$password=$_POST['password'];
+addriver($first,$last,$phone,$email,$password);
 }
+$conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
+//  $conn = mysqli_connect('localhost','kbvahg66_crystal','@C=-.rC0-qN?','kbvahg66_crystal') or die('unable to connect');
+$record_per_page = 10;
+$page = '';
+if(isset($_GET["page"]))
+{
+    $page = $_GET["page"];
+}
+else
+{
+    $page = 1;
+}
+
+$start_from = ($page-1)*$record_per_page;
+
+$query = "select * from bin_location order by id DESC LIMIT $start_from, $record_per_page";
+$result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
 <html>
@@ -50,7 +70,7 @@ addriver($first,$last,$phone);
 			margin: 20px;
 		}
 		button{
-			
+
 			margin-top: 10px
 		}
 		.card-header{
@@ -66,7 +86,7 @@ addriver($first,$last,$phone);
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-     
+
 
     </ul>
     <div class="form-inline my-2 my-lg-0">
@@ -79,75 +99,119 @@ addriver($first,$last,$phone);
   </div>
 </nav>
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-4">
-			<div class="card">
-			<div class="card-header" >
-				<h1>Smart Bin</h1>
-			</div>
-			<!-- <div class="card-body">
-				<h4><P>Clean India</P></h4>
-			</div> -->
-			</div>
-		</div>
-		<div class="col-md-4">
-			<div class="card">
-			<div class="card-header" >
-				<h4>Driver Detail</h4>
-			</div>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1" style="box-shadow: unset;">
-  View Driver
-</button>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" >
+                    <h1>Smart Bin</h1>
+                </div>
+                <div class="card-body">
+                    <img src="smbin.jpg" style="height: 50px;" class="img-fluid" alt="">
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" >
+                    <h4>Driver Detail</h4>
+                </div>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1" style="box-shadow: unset;">
+                    View Driver
+                </button>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2" style="box-shadow: unset;">
-  Add Driver
-</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2" style="box-shadow: unset;">
+                    Add Driver
+                </button>
 
-			</div>
-		</div>
-		<div class="col-md-4">
-			<div class="card">
-					<div class="card-header" >
-				<h4>Bin Detail</h4>
-			</div>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal3" style="box-shadow: unset;">
-  Add Bin
-</button>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal4" style="box-shadow: unset;">
-  Generate report
-</button>
+            </div>
+            <div class="card">
+                <div class="card-header" >
+                    <h4>Bin Detail</h4>
+                </div>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal3" style="box-shadow: unset;">
+                    Add Bin
+                </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal4" style="box-shadow: unset;">
+                    Generate report
+                </button>
 
 
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-header">
-					<h3>Bin Status</h3>
-				</div>
-				<div  class="table-responsive">
-		<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">name</th>
-      <th scope="col">Latitude</th>
-      <th scope="col">Longitude</th>
-      <th scope="col">Status</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
- <?php viewbin(); ?>
-  </tbody>
-</table>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Bin Status</h3>
+                </div>
+                <div  class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">id</th>
+                            <th scope="col">name</th>
+                            <th scope="col">Latitude</th>
+                            <th scope="col">Longitude</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        while($row = mysqli_fetch_array($result))
+                        {
+                            ?>
+                            <tr>
+                                <th scope="row"><?php echo $row["0"]; ?></th>
+                                <td><?php echo $row["1"]; ?></td>
+                                <td><?php echo $row["2"]; ?></td>
+                                <td><?php echo $row["3"]; ?></td>
+                                <td><?php echo $row["4"]; ?></td>
+                                <td><a href="?deletebin=<?php echo $row[0]; ?>" name="deletebin" class="btn btn-danger">Delete</a>
+                                    <!--          <a href="" name="hidedelete" class="btn btn-warning" style="margin-left: 5px;">Hide</a></td>-->
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <?php
+                            $page_query = "select * from bin_location ORDER BY id DESC";
+                            $page_result = mysqli_query($conn, $page_query);
+                            $total_records = mysqli_num_rows($page_result);
+                            $total_pages = ceil($total_records/$record_per_page);
+                            $start_loop = $page;
+                            $difference = $total_pages - $page;
+                            if($difference <= 5)
+                            {
+                                $start_loop = $total_pages - 5;
+                            }
+                            $end_loop = $start_loop + 4;
+                            if($page > 1)
+                            {
+                                echo " <li class='page-item'><a class='page-link' href='home.php?page=1'>First</a></li>";
+                                echo " <li class='page-item'><a class='page-link' href='home.php?page=".($page - 1)."'>Previous</a></li>";
+                            }
+                            for($i=$start_loop; $i<=$end_loop; $i++)
+                            {
+
+
+                                if($i>0)
+                                    echo "<li class='page-item'><a class='page-link' href='home.php?page=".$i."'>".$i."</a></li>";
+                            }
+                            if($page <= $end_loop)
+                            {
+                                echo "<li class='page-item'><a class='page-link' href='home.php?page=".($page + 1)."'>Next</a></li>";
+                                echo "<li class='page-item'><a class='page-link' href='home.php?page=".$total_pages."'>Last</a></li>";
+                            }
+                            ?>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-			</div>
-		</div>
-	</div>
-</div>
+
 <!-- Modal -->
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -204,8 +268,16 @@ addriver($first,$last,$phone);
     <input type="text" name="last" class="form-control" id="exampleInputPassword1" placeholder="Last name">
   </div>
   <div class="form-group">
-    <label for="exampleInputEmail2">Name</label>
-    <input type="text" name="phone" class="form-control" id="exampleInputEmail2"  placeholder="Phone">
+    <label for="Phones">Phone</label>
+    <input type="tel" name="phone" class="form-control" id="Phones"  placeholder="Phone">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail3">Email</label>
+    <input type="email" name="email" class="form-control" id="exampleInputEmail3"  placeholder="Email">
+  </div>
+  <div class="form-group">
+    <label for="Passwords">Password</label>
+    <input type="password" name="password" class="form-control" id="Passwords"  placeholder="Password">
   </div>
  <button name="addriver" class="btn btn-primary btn-block">Add Driver</button>
 </form>
@@ -229,7 +301,7 @@ addriver($first,$last,$phone);
         </button>
       </div>
       <div class="modal-body">
-               
+
                <form method="post">
   <div class="form-group">
     <label for="exampleInputEmail1">Latitude</label>

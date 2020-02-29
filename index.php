@@ -1,5 +1,11 @@
 <?php
+session_start();
 include 'helper.php';
+if(isset($_SESSION['login']))
+{
+    header("Location:home.php");
+}
+
 if(isset($_POST['submit']))
 {
 
@@ -21,7 +27,7 @@ login($email,$password);
 	<div class="container-fluid">
 <div class="row">
 	<div class="col-md-4">
-		
+
 	</div>
 	<div class="col-md-4">
 		<div class="card" style="margin-top: 130px;padding: 20px;">
@@ -45,7 +51,7 @@ login($email,$password);
 		</div>
 	</div>
 	<div class="col-md-4">
-		
+
 	</div>
 </div>
 </div>

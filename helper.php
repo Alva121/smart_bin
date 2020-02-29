@@ -1,11 +1,13 @@
 <?php
 
 function login($email,$password){
-session_start();
-if ($_SESSION['login']==true || ($email=="admin@gmail.com" && $password=="password")) {
+
+if ($_SESSION['login']==true || ($email=="admin@gmail.com" && $password=="password"))
+{
             $_SESSION['login']=true;
-              header("Location:home.php");
-        }
+         //   echo $_SESSION['login'];
+           header("Location:home.php");
+}
 
         else {
         	echo "<script>alert('Try again');</script>";
@@ -15,11 +17,11 @@ if ($_SESSION['login']==true || ($email=="admin@gmail.com" && $password=="passwo
 
 
 
-function addriver($first,$last,$phone){
+function addriver($first,$last,$phone,$email,$password){
   $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
 
 
-$result=mysqli_query($conn,"insert into driver (first,last,phone) values ('$first','$last','$phone')");
+$result=mysqli_query($conn,"insert into driver (first,last,phone,email,password) values ('$first','$last','$phone','$email','$password')");
 if($result){
   echo "<script>alert('Registration successful');</script>";
 }
@@ -49,15 +51,28 @@ while($row= mysqli_fetch_array($result))
       <td><?php echo $row["1"]; ?><?php echo $row["2"]; ?></td>
       <td><?php echo $row["3"]; ?></td>
       <td><?php echo $row["4"]; ?></td>
-      <td><a href="" name="driverdelete" class="btn btn-danger">Delete</a></td>
+      <td><a href="?deletedriver=<?php echo $row[0]; ?>" name="deletedriver" class="btn btn-danger">Delete</a></td>
     </tr>
 <?php
 }
 
 }
 
-function deletedriver(){
+function deletedriver($id){
+    $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
 
+//$conn connecting to data base
+
+    $result=mysqli_query($conn,"delete from driver where id='$id'");
+
+    if($result){
+        echo "<script>alert('Deleted successful');</script>";
+        //display notification
+    }
+    else
+    {
+        echo "<script>alert('Try again');</script>";
+    }
 }
 
 function addbin($lat,$lng,$name){
@@ -92,15 +107,29 @@ while($row= mysqli_fetch_array($result))
       <td><?php echo $row["2"]; ?></td>
       <td><?php echo $row["3"]; ?></td>
       <td><?php echo $row["4"]; ?></td>
-      <td><a href="" name="driverdelete" class="btn btn-danger">Delete</a><a href="" name="hidedelete" class="btn btn-warning" style="margin-left: 5px;">Hide</a></td>
+      <td><a href="?deletebin=<?php echo $row[0]; ?>" name="deletebin" class="btn btn-danger">Delete</a>
+<!--          <a href="" name="hidedelete" class="btn btn-warning" style="margin-left: 5px;">Hide</a></td>-->
     </tr>
 <?php
 }
 }
 
 
-function deletebin(){
+function deletebin($id){
+    $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
 
+//$conn connecting to data base
+
+    $result=mysqli_query($conn,"delete from bin_location where id='$id'");
+
+    if($result){
+        echo "<script>alert('Deleted successful');</script>";
+        //display notification
+    }
+    else
+    {
+        echo "<script>alert('Try again');</script>";
+    }
 }
 
 
