@@ -99,15 +99,20 @@ $result = mysqli_query($conn, $query);
   </div>
 </nav>
 <div class="container-fluid">
+
+
+
+
     <div class="row">
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header" >
                     <h1>Smart Bin</h1>
                 </div>
-                <div class="card-body">
-                    <img src="smbin.jpg" style="height: 50px;" class="img-fluid" alt="">
-                </div>
+
+<!--                    <img src="sm1bin.jpg"  class="img-fluid" alt="" style="padding: unset;">-->
+                    <iframe src="http://localhost/smartbin/smartbin/admin.php" frameborder="0"  allowfullscreen="" style="width: 100%;height: 100%;margin:0px;border: 0;"></iframe>
+
             </div>
             <div class="card">
                 <div class="card-header" >

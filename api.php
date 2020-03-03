@@ -26,6 +26,16 @@ if($_GET['type']==2)
     $result=mysqli_query($conn,"insert into user_feedback (name,phone,message,lat,lng) values ('$name','$phone','$msg','$lat','$lng')");
 
 }
+if($_GET['type']==3)
+{
 
+    $id=$_GET['id'];
+    $status=$_GET['status'];
+    $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
+
+    $result=mysqli_query($conn,"UPDATE bin_location SET status='$status' WHERE id='$id'");
+if($result)
+    echo "ok".$status.$id;else echo "fail";
+}
 
 ?>
