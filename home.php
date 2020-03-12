@@ -31,39 +31,25 @@ addbin($lat,$lng,$name);
 }
 if(isset($_POST['addriver']))
 {
-$first=$_POST['first'];
-$last=$_POST['last'];
+$name=$_POST['name'];
 $phone=$_POST['phone'];
 $email=$_POST['email'];
 $password=$_POST['password'];
-addriver($first,$last,$phone,$email,$password);
+addriver($name,$phone,$email,$password);
 }
-$conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
-//  $conn = mysqli_connect('localhost','kbvahg66_crystal','@C=-.rC0-qN?','kbvahg66_crystal') or die('unable to connect');
-$record_per_page = 10;
-$page = '';
-if(isset($_GET["page"]))
-{
-    $page = $_GET["page"];
-}
-else
-{
-    $page = 1;
-}
-
-$start_from = ($page-1)*$record_per_page;
-
-$query = "select * from bin_location order by id DESC LIMIT $start_from, $record_per_page";
-$result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>SmartBin</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
 	<style>
 		.card{
 			padding: 20px;
@@ -79,15 +65,19 @@ $result = mysqli_query($conn, $query);
 	</style>
 </head>
 <body class="bg-secondary">
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Navbar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-
-
+      <li class="nav-item active">
+        <a class="nav-link" href="feedback.php">User Feedback</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="report.php">Report</a>
+      </li>
     </ul>
     <div class="form-inline my-2 my-lg-0">
        <div class="navbar-nav mr-auto nav-item active">
@@ -134,11 +124,6 @@ $result = mysqli_query($conn, $query);
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal3" style="box-shadow: unset;">
                     Add Bin
                 </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal4" style="box-shadow: unset;">
-                    Generate report
-                </button>
-
-
             </div>
         </div>
         <div class="col-md-8">
@@ -146,8 +131,8 @@ $result = mysqli_query($conn, $query);
                 <div class="card-header">
                     <h3>Bin Status</h3>
                 </div>
-                <div  class="table-responsive">
-                    <table class="table table-bordered">
+                <div  >
+                     <table id="example" class="table table-striped table-bordered">
                         <thead>
                         <tr>
                             <th scope="col">id</th>
@@ -159,58 +144,9 @@ $result = mysqli_query($conn, $query);
                         </tr>
                         </thead>
                         <tbody>
-                        <?php
-                        while($row = mysqli_fetch_array($result))
-                        {
-                            ?>
-                            <tr>
-                                <th scope="row"><?php echo $row["0"]; ?></th>
-                                <td><?php echo $row["1"]; ?></td>
-                                <td><?php echo $row["2"]; ?></td>
-                                <td><?php echo $row["3"]; ?></td>
-                                <td><?php echo $row["4"]; ?></td>
-                                <td><a href="?deletebin=<?php echo $row[0]; ?>" name="deletebin" class="btn btn-danger">Delete</a>
-                                    <!--          <a href="" name="hidedelete" class="btn btn-warning" style="margin-left: 5px;">Hide</a></td>-->
-                            </tr>
-                            <?php
-                        }
-                        ?>
+                        <?php viewbin(); ?>
                         </tbody>
                     </table>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            <?php
-                            $page_query = "select * from bin_location ORDER BY id DESC";
-                            $page_result = mysqli_query($conn, $page_query);
-                            $total_records = mysqli_num_rows($page_result);
-                            $total_pages = ceil($total_records/$record_per_page);
-                            $start_loop = $page;
-                            $difference = $total_pages - $page;
-                            if($difference <= 5)
-                            {
-                                $start_loop = $total_pages - 5;
-                            }
-                            $end_loop = $start_loop + 4;
-                            if($page > 1)
-                            {
-                                echo " <li class='page-item'><a class='page-link' href='home.php?page=1'>First</a></li>";
-                                echo " <li class='page-item'><a class='page-link' href='home.php?page=".($page - 1)."'>Previous</a></li>";
-                            }
-                            for($i=$start_loop; $i<=$end_loop; $i++)
-                            {
-
-
-                                if($i>0)
-                                    echo "<li class='page-item'><a class='page-link' href='home.php?page=".$i."'>".$i."</a></li>";
-                            }
-                            if($page <= $end_loop)
-                            {
-                                echo "<li class='page-item'><a class='page-link' href='home.php?page=".($page + 1)."'>Next</a></li>";
-                                echo "<li class='page-item'><a class='page-link' href='home.php?page=".$total_pages."'>Last</a></li>";
-                            }
-                            ?>
-                        </ul>
-                    </nav>
                 </div>
             </div>
         </div>
@@ -266,11 +202,7 @@ $result = mysqli_query($conn, $query);
         <form method="post">
   <div class="form-group">
     <label for="exampleInputEmail1">First Name</label>
-    <input type="text" name="first" class="form-control" id="exampleInputEmail1" placeholder="First name">
-  </div>
-    <div class="form-group">
-    <label for="exampleInputPassword1">Last name</label>
-    <input type="text" name="last" class="form-control" id="exampleInputPassword1" placeholder="Last name">
+    <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="First name">
   </div>
   <div class="form-group">
     <label for="Phones">Phone</label>
@@ -308,6 +240,10 @@ $result = mysqli_query($conn, $query);
       <div class="modal-body">
 
                <form method="post">
+      <div class="form-group">
+    <label for="exampleInputPassword1">Location name</label>
+    <input type="text" name="name" class="form-control" id="exampleInputPassword1" placeholder="Name">
+  </div>
   <div class="form-group">
     <label for="exampleInputEmail1">Latitude</label>
     <input type="text" name="lat" class="form-control" id="exampleInputEmail1" placeholder=" Latitude">
@@ -316,12 +252,8 @@ $result = mysqli_query($conn, $query);
     <label for="exampleInputEmail2">Longitude</label>
     <input type="text" name="lng" class="form-control" id="exampleInputEmail2"  placeholder="Longitude">
   </div>
-    <div class="form-group">
-    <label for="exampleInputPassword1">Name</label>
-    <input type="text" name="name" class="form-control" id="exampleInputPassword1" placeholder="name">
-  </div>
  <button name="addbin" class="btn btn-primary btn-block">Add Bin</button>
-</form>
+              </form>
 
       </div>
       <div class="modal-footer">
@@ -351,4 +283,9 @@ $result = mysqli_query($conn, $query);
   </div>
 </div>
 </body>
+  <script type="text/javascript">
+    $(document).ready(function() {
+    $('#example').DataTable();
+} );
+  </script>
 </html>

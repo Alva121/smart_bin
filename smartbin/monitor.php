@@ -45,7 +45,7 @@ echo json_encode($a);
     //     "lat": '   12.8987552',
     //     "lng": '74.9822813',
     //     "description": 'Canara Engineering College, Benjana Padavu, Karnataka'
-      
+
     // },
     // {
     //     "title": 'Nehru nagar',
@@ -72,7 +72,7 @@ echo json_encode($a);
     //     "description": 'Mangal store,puttur.'
     // }
     // ];
-     
+
 
     window.onload = function () {
          mapOptions = {
@@ -85,7 +85,7 @@ echo json_encode($a);
         MQTTconnect();
     }
     function LoadMap(payload) {
-       
+
 
         //Create and open InfoWindow.
         var infoWindow = new google.maps.InfoWindow();
@@ -121,11 +121,11 @@ case 3:
 // {
 //  l={text: "Garbage FULL", color: "red",fontSize: "20px"};
 // }
-var icon = { 
+var icon = {
     url: 'b.png',
     origin: new google.maps.Point(0, 0),
     labelOrigin: new google.maps.Point(20,0)
-};  
+};
 var myLatlng;
 var data ;
 
@@ -141,7 +141,7 @@ console.log(markers[i-1]);
 if(m[i]==null)
 {
    data = markers[i-1];
-            
+
 myLatlng = new google.maps.LatLng(data.lat, data.lng);
 
 m[i] = new google.maps.Marker({
@@ -165,7 +165,7 @@ m[i] = new google.maps.Marker({
 // if(payload.substring(0,3).search("BOL")!=-1)
 // {
 //    data = markers[2];
-            
+
 //             myLatlng = new google.maps.LatLng(data.lat, data.lng);
 //   try{
 //          if(m1==null)
@@ -186,14 +186,14 @@ m[i] = new google.maps.Marker({
 //     label.color=l.color;
 //     label.text=l.text;
 //     m1.setLabel(label);
- 
-//          } 
+
+//          }
 //          }catch(e){}
-         
+
 // }else if(payload.substring(0,3).search("NAG")!=-1)
 // {
 //    data = markers[1];
-            
+
 //             myLatlng = new google.maps.LatLng(data.lat, data.lng);
 
 // if(m2==null)
@@ -216,7 +216,7 @@ m[i] = new google.maps.Marker({
 // }else if(payload.substring(0,3).search("BNR")!=-1)
 // {
 //    data = markers[0];
-            
+
 //             myLatlng = new google.maps.LatLng(data.lat, data.lng);
 //   try{
 //             marker.setMap(null);
@@ -231,23 +231,23 @@ m[i] = new google.maps.Marker({
 // }
 
 
-  
-      
-        
+
+
+
        for (var i = 0; i < markers.length; i++) {
-           
-           
-          
-     
+
+
+
+
 
             //Attach click event to the marker.
             (function (marker, data) {
                 google.maps.event.addListener(marker, "click", function (e) {
                     //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
-                    infoWindow.setContent("<div style = 'width:200px;min-height:40px'>" + data.description + "</div>");
+                    infoWindow.setContent("<div style = 'width:200px;min-height:40px'>" + "hat" + "</div>");
                     infoWindow.open(map, marker);
                 });
-            })(marker, data);
+            })(m[i], data[i]);
        }
     }
 
@@ -257,7 +257,7 @@ m[i] = new google.maps.Marker({
   var mqtt;
     var reconnectTimeout = 5000;
     var host,port;
-   
+
     function MQTTconnect() {
 
        host='broker.mqttdashboard.com';
@@ -275,7 +275,7 @@ m[i] = new google.maps.Marker({
             cleanSession:true,
             onSuccess: onConnect,
             onFailure: function (message) {
-               
+
             }
         };
 
@@ -290,9 +290,9 @@ m[i] = new google.maps.Marker({
   try{
       //  mqtt.disconnect();
       }catch(e){}finally{
-     
+
       }
-      
+
 
     }
 
@@ -300,21 +300,21 @@ m[i] = new google.maps.Marker({
        alert('Connected to ' + host + ':' + port + path);
         // Connection succeeded; subscribe to our topic
         mqtt.subscribe("slekin/test/bin", {qos: 0});
-     
+
         rc=true;
-        
+
     }
 
     function onConnectionLost(response) {
-     
+
         setTimeout(MQTTconnect, reconnectTimeout);
         $('#status').html("connection lost: " + response.errorMessage + ". Reconnecting");
-     
-    };
-   
 
-     
-  
+    };
+
+
+
+
     function onMessageArrived(message) {
          var topic = message.destinationName;
              var payload = message.payloadString;
@@ -329,7 +329,7 @@ m[i] = new google.maps.Marker({
 
      function onLogout()
      {
-   
+
       mqtt.disconnect();
 
      }
@@ -339,7 +339,7 @@ m[i] = new google.maps.Marker({
       message = new Paho.MQTT.Message(a);
     message.destinationName = "sc-home";
     message.qos=0;
-    mqtt.send(message); 
+    mqtt.send(message);
     }
        // MQTTconnect();
 </script>
@@ -347,5 +347,5 @@ m[i] = new google.maps.Marker({
 </div>
 </body>
 
-    
+
 </html>

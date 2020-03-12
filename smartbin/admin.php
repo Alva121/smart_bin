@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyCccic5O5iz_A-tZ4IhkCKe_LZHp0rHH0E"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyCccic5O5iz_A-tZ4IhkCKe_LZHp0rHH0E"></script>
 <script type="text/javascript">
      var map;
      var mapOptions;
