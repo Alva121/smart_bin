@@ -72,13 +72,29 @@ $result=mysqli_query($conn,"select * from driver where email='$email' and passwo
 if($_GET['type']==6)
 {
     $name=$_GET['name'];
-    $type=$_GET['_type'];
+    $temp=$_GET['_type'];
     $lat=$_GET['lat'];
     $lng=$_GET['lng'];
+    if ($temp==1) 
+    {
+    $plastic="Plastic";
+
     $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
 
-    $result=mysqli_query($conn,"insert into collector (name,lat,lng,type) values ('$name','$lat','$lng','$type')");
+    $result=mysqli_query($conn,"insert into collector (name,lat,lng,type) values ('$name','$lat','$lng','$plastic')");
     if($result)
     echo "0";else echo "-1";
+
+    }
+    else
+    {
+    $wet="Degradable";
+
+    $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
+
+    $result=mysqli_query($conn,"insert into collector (name,lat,lng,type) values ('$name','$lat','$lng','$wet')");
+    if($result)
+    echo "0";else echo "-1";
+    }
 }
 ?>

@@ -151,6 +151,14 @@ m[i] = new google.maps.Marker({
                 icon: icon,
                 title: data.status
             });
+  (function (marker, data) {
+                google.maps.event.addListener(marker, "click", function (e) {
+                    //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
+                    infoWindow.setContent("<div style = 'width:200px;min-height:40px'><a href='https://maps.google.com?q="+data.lat+","+data.lng+"'>Go to Place</a></div>");
+                    infoWindow.open(map, marker);
+                });
+            })(m[i], data);
+
 
 }else
 {
@@ -159,6 +167,11 @@ m[i] = new google.maps.Marker({
     label.text=l.text;
    m[i].setLabel(label);
 }
+
+
+
+
+
 // }
 
 
@@ -234,21 +247,15 @@ m[i] = new google.maps.Marker({
 
 
 
-       for (var i = 0; i < markers.length; i++) {
+       // for (var i = 0; i < markers.length; i++) {
 
 
 
 
 
-            //Attach click event to the marker.
-            (function (marker, data) {
-                google.maps.event.addListener(marker, "click", function (e) {
-                    //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
-                    infoWindow.setContent("<div style = 'width:200px;min-height:40px'>" + "hat" + "</div>");
-                    infoWindow.open(map, marker);
-                });
-            })(m[i], data[i]);
-       }
+       //      //Attach click event to the marker.
+          
+       // }
     }
 
 
