@@ -130,6 +130,7 @@ while($row= mysqli_fetch_array($result))
       <td><?php echo $row["2"]; ?></td>
       <td><?php echo $row["3"]; ?></td>
       <td><?php echo $row["4"]; ?></td>
+      <td><?php echo $row["5"]; ?></td>
     </tr>
 <?php
 }

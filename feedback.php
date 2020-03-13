@@ -76,9 +76,10 @@ header("location:index.php");
                         <tr>
                             <th scope="col">id</th>
                             <th scope="col">user</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Message</th>
                             <th scope="col">Latitude</th>
                             <th scope="col">Longitude</th>
-                            <th scope="col">Message</th>
                         </tr>
                         </thead>
                         <tbody>
