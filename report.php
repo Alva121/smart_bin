@@ -12,9 +12,9 @@ if(isset($_POST['logout']))
 session_destroy();
 header("location:index.php");
 }
- $connect = mysqli_connect("localhost", "root", "", "Smartbin");  
- $query = "SELECT type, count(*) as number FROM collector WHERE DATE(created_at) >= DATE(NOW()) - INTERVAL 30 DAY GROUP BY type";  
- $result = mysqli_query($connect, $query); 
+include "db.php";
+ $query = "SELECT type, count(*) as number FROM collector WHERE DATE(created_at) >= DATE(NOW()) - INTERVAL 30 DAY GROUP BY type";
+ $result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,30 +28,30 @@ header("location:index.php");
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>  
-           <script type="text/javascript">  
-           google.charts.load('current', {'packages':['corechart']});  
-           google.charts.setOnLoadCallback(drawChart);  
-           function drawChart()  
-           {  
-                var data = google.visualization.arrayToDataTable([  
-                          ['Type', 'Number'],  
-                          <?php  
-                          while($row = mysqli_fetch_array($result))  
-                          {  
-                               echo "['".$row["type"]."', ".$row["number"]."],";  
-                          }  
-                          ?>  
-                     ]);  
-                var options = {  
-                      title: 'Amount of waste collected this month',  
-                      //is3D:true,  
-                      pieHole: 0.4  
-                     };  
-                var chart = new google.visualization.PieChart(document.getElementById('piechart'));  
-                chart.draw(data, options);  
-           }  
-           </script> 
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+           <script type="text/javascript">
+           google.charts.load('current', {'packages':['corechart']});
+           google.charts.setOnLoadCallback(drawChart);
+           function drawChart()
+           {
+                var data = google.visualization.arrayToDataTable([
+                          ['Type', 'Number'],
+                          <?php
+                          while($row = mysqli_fetch_array($result))
+                          {
+                               echo "['".$row["type"]."', ".$row["number"]."],";
+                          }
+                          ?>
+                     ]);
+                var options = {
+                      title: 'Amount of waste collected this month',
+                      //is3D:true,
+                      pieHole: 0.4
+                     };
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                chart.draw(data, options);
+           }
+           </script>
 	<style>
 		.card{
 			padding: 20px;
@@ -89,10 +89,10 @@ header("location:index.php");
 </nav>
 <div class="container-fluid">
 <div class="card">
-  <div style="width:900px;">  
-                <h3 align="center">Monthly Report</h3>  
-                <br />  
-                <div id="piechart" style="width: 900px; height: 500px;"></div>  
+  <div style="width:900px;">
+                <h3 align="center">Monthly Report</h3>
+                <br />
+                <div id="piechart" style="width: 900px; height: 500px;"></div>
            </div>
 </div>
 </div>

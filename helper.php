@@ -18,7 +18,7 @@ if ($_SESSION['login']==true || ($email=="admin@gmail.com" && $password=="passwo
 
 
 function addriver($first,$last,$phone,$email,$password){
-  $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
+  include "db.php";
 
 
 $result=mysqli_query($conn,"insert into driver (name,phone,email,password) values ('$fname','$phone','$email','$password')");
@@ -38,7 +38,7 @@ else
 }
 
 function viewdriver(){
-  $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
+  include "db.php";
 
 
 $result=mysqli_query($conn,"select * from driver where type=1  order by id desc");
@@ -59,7 +59,7 @@ while($row= mysqli_fetch_array($result))
 }
 
 function deletedriver($id){
-    $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
+    include "db.php";
 
 //$conn connecting to data base
 
@@ -76,7 +76,7 @@ function deletedriver($id){
 }
 
 function addbin($lat,$lng,$name){
-  $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
+  include "db.php";
 
 
 $result=mysqli_query($conn,"insert into bin_location (name,lat,lng) values ('$name','$lat','$lng')");
@@ -94,7 +94,7 @@ else
 
 
 function viewbin(){
-    $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
+    include "db.php";
 
 
 $result=mysqli_query($conn,"select * from bin_location  order by id desc");
@@ -116,7 +116,7 @@ while($row= mysqli_fetch_array($result))
 }
 
 function viewfeedback(){
-    $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
+    include "db.php";
 
 
 $result=mysqli_query($conn,"select * from user_feedback  order by id desc");
@@ -138,7 +138,7 @@ while($row= mysqli_fetch_array($result))
 
 
 function deletebin($id){
-    $conn = mysqli_connect('localhost','root','','smartbin') or die('unable to connect');
+    include "db.php";
 
 //$conn connecting to data base
 
