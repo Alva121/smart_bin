@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/view"
+        android:icon="@drawable/ic_add_location_black_24dp"
+        android:title="View Bin" />
+    <item
+        android:id="@+id/track"
+        android:icon="@drawable/ic_streetview_black_24dp"
+        android:title="FeedBack" />
+</menu>
